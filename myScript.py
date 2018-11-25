@@ -14,6 +14,7 @@ def nmapScan(ipRange = '127.0.0.1', portRange = '1-1000'):
 	# we can parse this for something? or use vulnscan
 	print(nm.csv())
 
+	# need to have a vulnerable system to test on? and then to figure out how to parse the result...
 	result = check_output("nmap --script nmap-vulners -sV " + ipRange, shell=True)
 	print(result)
 
