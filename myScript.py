@@ -4,55 +4,56 @@ import vulners
 import re
 
 vuln_scripts = {
-	'CVE-2010-0533' : 'afp-path-vuln',
-	'CVE-2011-1002' : 'broadcast-avahi-dos',
-	'CVE-2004-2687' : 'distcc-cve2004-2687',
-	'CVE-2010-1938' : 'ftp-libopie',
-	'CVE-2011-2523' : 'ftp-vsftpd-backdoor',
-	'CVE-2010-4221' : 'ftp-vuln-cve2010-4221',
-	'CVE-2008-3922' : 'http-awstatstotals-exec',
-	'CVE-2010-2333' : 'http-litespeed-sourcecode-download',
-	'CVE-2011-0049' : 'http-majordomo2-dir-traversal',
-	'CVE-2014-6271' : 'http-shellshock',
-	'CVE-2014-7169' : 'http-shellshock',
-	'CVE-2009-3733' : 'http-vmware-path-vuln',
-	'CVE-2006-3392' : 'http-vuln-cve2006-3392',
-	'CVE-2009-3960' : 'http-vuln-cve2009-3960',
-	'CVE-2010-0738' : 'http-vuln-cve2010-0738',
-	'CVE-2010-2861' : 'http-vuln-cve2010-2861',
-	'CVE-2011-3192' : 'http-vuln-cve2011-3192',
-	'CVE-2011-3368' : 'http-vuln-cve2011-3368',
-	'CVE-2012-1823' : 'http-vuln-cve2012-1823',
-	'CVE-2013-0156' : 'http-vuln-cve2013-0156',
-	'CVE-2013-6786' : 'http-vuln-cve2013-6786',
-	'CVE-2013-7091' : 'http-vuln-cve2013-7091',
-	'CVE-2014-2126' : 'http-vuln-cve2014-2126',
-	'CVE-2014-2127' : 'http-vuln-cve2014-2127',
-	'CVE-2014-2128' : 'http-vuln-cve2014-2128',
-	'CVE-2014-2129' : 'http-vuln-cve2014-2129',
-	'CVE-2014-3704' : 'http-vuln-cve2014-3704',
-	'CVE-2014-8877' : 'http-vuln-cve2014-8877',
-	'CVE-2015-1427' : 'http-vuln-cve2015-1427',
-	'CVE-2015-1635' : 'http-vuln-cve2016-1635',
-	'CVE-2017-1001000' : 'http-vuln-cve2017-1001000',
-	'CVE-2017-5638' : 'http-vuln-cve2017-5638',
-	'CVE-2017-5639' : 'http-vuln-cve2017-5639',
-	'CVE-2017-8917' : 'http-vuln-cve2017-8917',
-	'CVE-2006-2369' : 'realvnc-auth-bypass',
-	'CVE-2012-1182' : 'samba-vuln-cve-2012-1182',
-    'CVE-2017-7494' : 'smb-vuln-cve-2017-7494',
-    'CVE-2009-3103' : 'smb-vuln-cve2009-3103',
-    'CVE-2010-4344' : 'smtp-vuln-cve2010-4344',
-    'CVE-2010-4345' : 'smtp-vuln-cve2010-4344',
-    'CVE-2011-1720' : 'smtp-vuln-cve2011-1720',
-    'CVE-2011-1764' : 'smtp-vuln-cve2011-1764',
-    'CVE-2014-0224' : 'ssl-ccs-injection',
-    'CVE-2014-0160' : 'ssl-heartbleed',
-    'CVE-2015-3197' : 'sslv2-drown',
-    'CVE-2016-0703' : 'sslv2-drown',
-    'CVE-2016-0800' : 'sslv2-drown',
-    'CVE-2016-9244' : 'tls-ticketbleed'
+    'CVE-2010-0533': 'afp-path-vuln',
+    'CVE-2011-1002': 'broadcast-avahi-dos',
+    'CVE-2004-2687': 'distcc-cve2004-2687',
+    'CVE-2010-1938': 'ftp-libopie',
+    'CVE-2011-2523': 'ftp-vsftpd-backdoor',
+    'CVE-2010-4221': 'ftp-vuln-cve2010-4221',
+    'CVE-2008-3922': 'http-awstatstotals-exec',
+    'CVE-2010-2333': 'http-litespeed-sourcecode-download',
+    'CVE-2011-0049': 'http-majordomo2-dir-traversal',
+    'CVE-2014-6271': 'http-shellshock',
+    'CVE-2014-7169': 'http-shellshock',
+    'CVE-2009-3733': 'http-vmware-path-vuln',
+    'CVE-2006-3392': 'http-vuln-cve2006-3392',
+    'CVE-2009-3960': 'http-vuln-cve2009-3960',
+    'CVE-2010-0738': 'http-vuln-cve2010-0738',
+    'CVE-2010-2861': 'http-vuln-cve2010-2861',
+    'CVE-2011-3192': 'http-vuln-cve2011-3192',
+    'CVE-2011-3368': 'http-vuln-cve2011-3368',
+    'CVE-2012-1823': 'http-vuln-cve2012-1823',
+    'CVE-2013-0156': 'http-vuln-cve2013-0156',
+    'CVE-2013-6786': 'http-vuln-cve2013-6786',
+    'CVE-2013-7091': 'http-vuln-cve2013-7091',
+    'CVE-2014-2126': 'http-vuln-cve2014-2126',
+    'CVE-2014-2127': 'http-vuln-cve2014-2127',
+    'CVE-2014-2128': 'http-vuln-cve2014-2128',
+    'CVE-2014-2129': 'http-vuln-cve2014-2129',
+    'CVE-2014-3704': 'http-vuln-cve2014-3704',
+    'CVE-2014-8877': 'http-vuln-cve2014-8877',
+    'CVE-2015-1427': 'http-vuln-cve2015-1427',
+    'CVE-2015-1635': 'http-vuln-cve2016-1635',
+    'CVE-2017-1001000': 'http-vuln-cve2017-1001000',
+    'CVE-2017-5638': 'http-vuln-cve2017-5638',
+    'CVE-2017-5639': 'http-vuln-cve2017-5639',
+    'CVE-2017-8917': 'http-vuln-cve2017-8917',
+    'CVE-2006-2369': 'realvnc-auth-bypass',
+    'CVE-2012-1182': 'samba-vuln-cve-2012-1182',
+    'CVE-2017-7494': 'smb-vuln-cve-2017-7494',
+    'CVE-2009-3103': 'smb-vuln-cve2009-3103',
+    'CVE-2010-4344': 'smtp-vuln-cve2010-4344',
+    'CVE-2010-4345': 'smtp-vuln-cve2010-4344',
+    'CVE-2011-1720': 'smtp-vuln-cve2011-1720',
+    'CVE-2011-1764': 'smtp-vuln-cve2011-1764',
+    'CVE-2014-0224': 'ssl-ccs-injection',
+    'CVE-2014-0160': 'ssl-heartbleed',
+    'CVE-2015-3197': 'sslv2-drown',
+    'CVE-2016-0703': 'sslv2-drown',
+    'CVE-2016-0800': 'sslv2-drown',
+    'CVE-2016-9244': 'tls-ticketbleed'
 }
+
 
 def nmapScan(ipRange='127.0.0.1', portRange='default'):
     '''
@@ -120,27 +121,26 @@ def vulnerability_scan(nmap_results):
     for host in nmap_results:
         print('Scanning for Common Vulnerabilities and Exposures for host {}'.format(host))
 
-		vulnerability_results[host] = {}
-		port_list = nmap_results[host]
-		for port in port_list:
-			port_info = port_list[port]
+        vulnerability_results[host] = {}
+        port_list = nmap_results[host]
+        for port in port_list:
+            port_info = port_list[port]
 
-			if port_info['product'] == '' and port_info['version'] == '':
-				service_string = ''
-			else:
-				service_string = ", " + port_info['product'] + " " + port_info['version']
-			print('Port ' + str(port) + ": " + port_info['name'] + service_string)
+            if port_info['product'] == '' and port_info['version'] == '':
+                service_string = ''
+            else:
+                service_string = ", " + port_info['product'] + " " + port_info['version']
+            print('Port ' + str(port) + ": " + port_info['name'] + service_string)
 
+    search_result = vulners_api.search(port_info['product'] + " " + port_info['version'])
 
-            search_result = vulners_api.search(port_info['product'] + " " + port_info['version'])
+    cve_list = extract_CVEs(search_result)
+    vulnerability_results[host][port] = cve_list
 
-			cve_list = extract_CVEs(search_result)
-			vulnerability_results[host][port] = cve_list
-
-			if(len(cve_list) > 0):
-				print("Possible CVEs Detected:")
-			for cve in vulnerability_results[host][port]:
-				print("\t" + unicode(cve))
+    if (len(cve_list) > 0):
+        print("Possible CVEs Detected:")
+    for cve in vulnerability_results[host][port]:
+        print("\t" + unicode(cve))
 
     return vulnerability_results
 
@@ -149,32 +149,32 @@ def extract_CVEs(search_results):
     '''
 	Uses regex to parse the vulners_api search result description for relevant CVE IDs
 	'''
-	cve_list = []
-	for result in search_results:
-		description = result['description']
-		cve_list += re.findall('CVE\S*', description)
+    cve_list = []
+    for result in search_results:
+        description = result['description']
+        cve_list += re.findall('CVE\S*', description)
 
-	return cve_list
+    return cve_list
 
 
 def run_scripts(vulnerability_results):
-	'''
-	Searches for relevant NSE vulns scripts corresponding to the possible CVE IDs
-	and runs them if any are found
-	'''
-	scripts = {}
+    '''
+    Searches for relevant NSE vulns scripts corresponding to the possible CVE IDs
+    and runs them if any are found
+    '''
+    scripts = {}
 
-	for host in vulnerability_results:
-		port_info = vulnerability_results[host]
-		for port in port_info:
-			cve_list = port_info[port]
-			for cve in cve_list:
-				if cve in vuln_scripts:
-					scripts[cve] = vuln_scripts[cve]
+    for host in vulnerability_results:
+        port_info = vulnerability_results[host]
+        for port in port_info:
+            cve_list = port_info[port]
+            for cve in cve_list:
+                if cve in vuln_scripts:
+                    scripts[cve] = vuln_scripts[cve]
 
-	print("Found %d relevant NSE vuln scripts".format(len(scripts)))
-	for script in scripts:
-		print("Running {} to detect vulnerability of host {} to {}".format(script, host, cve))
+    print("Found {} relevant NSE vuln scripts".format(len(scripts)))
+    for script in scripts:
+        print("Running {} to detect vulnerability of host {} to {}".format(script, host, cve))
 
 
 if __name__ == '__main__':
@@ -197,5 +197,5 @@ if __name__ == '__main__':
     vulnerability_results = vulnerability_scan(nmapResults)
 
     # step three: using the potential CVE IDs, search for supplemental
-	# nmap NSE vulnerability scripts and run for more information
-	run_scripts(vulnerability_results)
+    # nmap NSE vulnerability scripts and run for more information
+    run_scripts(vulnerability_results)
