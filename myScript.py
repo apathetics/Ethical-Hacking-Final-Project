@@ -46,6 +46,13 @@ def parse_nmap_results(nm):
 	for host in hosts:
 		scan_results[host] = nm[host]['tcp']
 
+		print("Found live host " + host)
+		for port in scan_results[host]:
+			port_info = scan_results[host][port]
+			service_string = port_info['name'] + ", " + port_info['product'] + " " + port_info['version']
+
+			print("\tport " + str(port) + " open: " + service_string)
+
 	return scan_results
 
 
@@ -60,10 +67,17 @@ def vulnerability_scan(nmap_results):
 	vulnerability_results = {}
 
 	for host in nmap_results:
-		port_list = nmap_results[host]
+		print('Scanning for Common Vulnerabilities and Exposures for host {}'.format(host))
 
+		port_list = nmap_results[host]
 		for port in port_list:
 			port_info = port_list[port]
+
+			if port_info['product'] == '' and port_info['version'] = '':
+				service_string = ''
+			else:
+				service_string = ", " + port_info['product'] + " " + port_info['version']
+			print('\tPort ' + str(port) + ": " + port_info['name'] + service_string)
 
 			search_result = vulners_api.search(port_info['product'] + " " + port_info['version'])
 
@@ -77,10 +91,8 @@ def extract_CVEs(search_results):
 	Uses regex to parse the vulners_api search result description for relevant CVE IDs
 	'''
 	CVE_list = []
-
 	for result in search_results:
 		description = result['description']
-
 		CVE_list += re.findall('CVE\S*', description)
 
 	return CVE_list
