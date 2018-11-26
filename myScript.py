@@ -132,15 +132,15 @@ def vulnerability_scan(nmap_results):
                 service_string = ", " + port_info['product'] + " " + port_info['version']
             print('Port ' + str(port) + ": " + port_info['name'] + service_string)
 
-    search_result = vulners_api.search(port_info['product'] + " " + port_info['version'])
+            search_result = vulners_api.search(port_info['product'] + " " + port_info['version'])
 
-    cve_list = extract_CVEs(search_result)
-    vulnerability_results[host][port] = cve_list
+            cve_list = extract_CVEs(search_result)
+            vulnerability_results[host][port] = cve_list
 
-    if (len(cve_list) > 0):
-        print("Possible CVEs Detected:")
-    for cve in vulnerability_results[host][port]:
-        print("\t" + unicode(cve))
+            if (len(cve_list) > 0):
+                print("Possible CVEs Detected:")
+            for cve in vulnerability_results[host][port]:
+                print("\t" + unicode(cve))
 
     return vulnerability_results
 
@@ -152,9 +152,9 @@ def extract_CVEs(search_results):
     cve_list = []
     for result in search_results:
         description = result['description']
-        cve_list += re.findall('CVE\S*', description)
+        cve_list += re.findall('CVE-\d{4}-\d{4}', description)
 
-    return cve_list
+    return list(set(cve_list))
 
 
 def run_scripts(vulnerability_results):
@@ -173,8 +173,8 @@ def run_scripts(vulnerability_results):
                     scripts[cve] = vuln_scripts[cve]
 
     print("Found {} relevant NSE vuln scripts".format(len(scripts)))
-    for script in scripts:
-        print("Running {} to detect vulnerability of host {} to {}".format(script, host, cve))
+    for cve in scripts:
+        print("Running {} to detect vulnerability of host {} to {}".format(scripts[cve], host, cve))
 
 
 if __name__ == '__main__':
