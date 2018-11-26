@@ -73,7 +73,7 @@ def vulnerability_scan(nmap_results):
 		for port in port_list:
 			port_info = port_list[port]
 
-			if port_info['product'] == '' and port_info['version'] = '':
+			if port_info['product'] == '' and port_info['version'] == '':
 				service_string = ''
 			else:
 				service_string = ", " + port_info['product'] + " " + port_info['version']
