@@ -1,9 +1,13 @@
 import nmap
 import sys
 import vulners
+import re
 
 def nmapScan(ipRange = '127.0.0.1', portRange = 'default'):
-
+	'''
+	Perform initial Nmap scan on specified ip and port range
+	Defaults to localhost and the default 1000 common ports scanned by nmap
+	'''
 	print("Doing port scan of range {} on ports {}. ".format(ipRange, portRange))
 	nm = nmap.PortScanner()
 
@@ -51,6 +55,7 @@ def vulnerability_scan(nmap_results):
 	using discovered ports and services from the previous nmap scan
 	'''
 
+	# TODO: hide api key?
 	vulners_api = vulners.Vulners(api_key="OW8179OUUBEZGQZ0V6NBZHOXSMX2DRNNB811MH7YV6D65N7YSGXKZQQKCZA6JX9W")
 	vulnerability_results = {}
 
@@ -62,7 +67,23 @@ def vulnerability_scan(nmap_results):
 
 			search_result = vulners_api.search(port_info['product'] + " " + port_info['version'])
 
-			print(search_result)
+			vulnerability_results[port] = extract_CVEs(search_result)
+
+	return vulnerability_results
+
+
+def extract_CVEs(search_results):
+	'''
+	Uses regex to parse the vulners_api search result description for relevant CVE IDs
+	'''
+	CVE_list = []
+
+	for result in search_results:
+		description = result['description']
+
+		CVE_list += re.findall('CVE\S*', description)
+
+	return CVE_list
 
 
 if __name__ =='__main__':
