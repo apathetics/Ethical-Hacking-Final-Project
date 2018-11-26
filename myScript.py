@@ -1,22 +1,43 @@
 import nmap
 import sys
-from subprocess import check_output
+import vulners
 
-
-def nmapScan(ipRange = '127.0.0.1', portRange = '1-1000'):
+def nmapScan(ipRange = '127.0.0.1', portRange = 'default'):
 
 	print("Doing port scan of range {} on ports {}. ".format(ipRange, portRange))
 	nm = nmap.PortScanner()
-	nm.scan(ipRange, portRange)
+	nm.scan(ipRange)
+	scan_results = parseNmapResults(nm)
 
-	# prints out info in this format:
-	# host;hostname;hostname_type;protocol;port;name;state;product;extrainfo;reason;version;conf;cpe
-	# we can parse this for something? or use vulnscan
-	print(nm.csv())
+	print(scan_results)
 
-	# need to have a vulnerable system to test on? and then to figure out how to parse the result...
-	result = check_output("nmap --script nmap-vulners -sV " + ipRange, shell=True)
-	print(result)
+
+def parseNmapCSV(nm):
+	'''
+	Returns dictionary of hosts and their discovered ports
+
+	Ex:
+	{'192.168.1.68' : {
+			22 : {
+				'product': 'OpenSSH',
+				'state': 'open',
+				'version': '4.7p1 Debian 8ubuntu1',
+				'name': 'ssh',
+				'conf': '10',
+				'extrainfo': 'protocol 2.0',
+				'reason': 'syn-ack',
+				'cpe': 'cpe:/o:linux:linux_kernel'
+			}
+		}
+	}
+	'''
+	hosts = nm.all_hosts()
+	scan_results = {}
+
+	for host in hosts:
+		scan_results[host] = nm[host]['tcp']
+
+	return scan_results
 
 
 if __name__ =='__main__':
@@ -30,7 +51,7 @@ if __name__ =='__main__':
 		nmapResults = nmapScan()
 	else:
 		ipRange = sys.argv[1]
-		portRange = sys.argv[2] if numArgs > 2 else "1-1000"
+		portRange = sys.argv[2] if numArgs > 2 else "default"
 
 		nmapResults = nmapScan(ipRange, portRange)
 
