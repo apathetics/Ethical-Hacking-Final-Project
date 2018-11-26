@@ -3,6 +3,6 @@ Automate nmap port scanning and mapping to a vulnerability.
 
 # Installation
 ```
-pip install nmap-python  
+pip install python-nmap
 pip install vulners
 ```
