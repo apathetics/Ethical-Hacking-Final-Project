@@ -2,6 +2,7 @@ import nmap
 import sys
 import vulners
 import re
+import subprocess
 
 vuln_scripts = {
     'CVE-2010-0533': 'afp-path-vuln',
@@ -60,7 +61,7 @@ def nmapScan(ipRange='127.0.0.1', portRange='default'):
 	Perform initial Nmap scan on specified ip and port range
 	Defaults to localhost and the default 1000 common ports scanned by nmap
 	'''
-    print("Doing port scan of range {} on ports {}. ".format(ipRange, portRange))
+    print("Doing port scan of range {} on ports {}. \n".format(ipRange, portRange))
     nm = nmap.PortScanner()
 
     if portRange == 'default':
@@ -103,7 +104,7 @@ def parse_nmap_results(nm):
             port_info = scan_results[host][port]
             service_string = port_info['name'] + ", " + port_info['product'] + " " + port_info['version']
 
-            print("\tport " + str(port) + " open: " + service_string)
+            print("\tPort " + str(port) + " open: " + service_string)
 
     return scan_results
 
@@ -119,7 +120,7 @@ def vulnerability_scan(nmap_results):
     vulnerability_results = {}
 
     for host in nmap_results:
-        print('Scanning for Common Vulnerabilities and Exposures for host {}'.format(host))
+        print('\nScanning for Common Vulnerabilities and Exposures for host {}'.format(host))
 
         vulnerability_results[host] = {}
         port_list = nmap_results[host]
@@ -130,7 +131,7 @@ def vulnerability_scan(nmap_results):
                 service_string = ''
             else:
                 service_string = ", " + port_info['product'] + " " + port_info['version']
-            print('Port ' + str(port) + ": " + port_info['name'] + service_string)
+            print('\tPort ' + str(port) + ": " + port_info['name'] + service_string)
 
             search_result = vulners_api.search(port_info['product'] + " " + port_info['version'])
 
@@ -138,7 +139,7 @@ def vulnerability_scan(nmap_results):
             vulnerability_results[host][port] = cve_list
 
             if (len(cve_list) > 0):
-                print("Possible CVEs Detected:")
+                print("\nPossible CVEs Detected:")
             for cve in vulnerability_results[host][port]:
                 print("\t" + unicode(cve))
 
@@ -172,9 +173,17 @@ def run_scripts(vulnerability_results):
                 if cve in vuln_scripts:
                     scripts[cve] = vuln_scripts[cve]
 
-    print("Found {} relevant NSE vuln scripts".format(len(scripts)))
+    print("\nFound {} relevant NSE vuln scripts".format(len(scripts)))
     for cve in scripts:
-        print("Running {} to detect vulnerability of host {} to {}".format(scripts[cve], host, cve))
+        print("Running \'{}\' to detect vulnerability of host \'{}\' to \'{}\' \n".format(scripts[cve], host, cve))
+        argument = '--script=' + scripts[cve]
+        
+        scriptOutput = subprocess.check_output(['nmap', host, argument])
+        if scripts[cve] in scriptOutput:
+            print("Script results:")
+            print(scriptOutput)
+        else: 
+            print("Script \'{}\' did not find a vulnerability.".format(scripts[cve]))
 
 
 if __name__ == '__main__':
