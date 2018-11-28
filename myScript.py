@@ -131,7 +131,7 @@ def vulnerability_scan(nmap_results):
                 service_string = ''
             else:
                 service_string = ", " + port_info['product'] + " " + port_info['version']
-            print('\tPort ' + str(port) + ": " + port_info['name'] + service_string)
+            print('Port ' + str(port) + ": " + port_info['name'] + service_string)
 
             search_result = vulners_api.search(port_info['product'] + " " + port_info['version'])
 
