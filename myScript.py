@@ -173,9 +173,9 @@ def run_scripts(vulnerability_results):
                 if cve in vuln_scripts:
                     scripts[cve] = vuln_scripts[cve]
 
-    print("\nFound {} relevant NSE vuln scripts".format(len(scripts)))
+    print("\nFound {} relevant NSE vuln scripts\n".format(len(scripts)))
     for cve in scripts:
-        print("Running \'{}\' to detect vulnerability of host \'{}\' to \'{}\' \n".format(scripts[cve], host, cve))
+        print("Running \'{}\' to detect vulnerability of host \'{}\' to \'{}\'".format(scripts[cve], host, cve))
         argument = '--script=' + scripts[cve]
         
         scriptOutput = subprocess.check_output(['nmap', host, argument])
@@ -183,7 +183,7 @@ def run_scripts(vulnerability_results):
             print("Script results:")
             print(scriptOutput)
         else: 
-            print("Script \'{}\' did not find a vulnerability.".format(scripts[cve]))
+            print("Script \'{}\' did not find a vulnerability.\n".format(scripts[cve]))
 
 
 if __name__ == '__main__':
