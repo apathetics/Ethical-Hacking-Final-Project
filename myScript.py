@@ -131,7 +131,7 @@ def vulnerability_scan(nmap_results):
                 service_string = ''
             else:
                 service_string = ", " + port_info['product'] + " " + port_info['version']
-            print('Port ' + str(port) + ": " + port_info['name'] + service_string)
+            print('\nPort ' + str(port) + ": " + port_info['name'] + service_string)
 
             search_result = vulners_api.search(port_info['product'] + " " + port_info['version'])
 
@@ -139,7 +139,7 @@ def vulnerability_scan(nmap_results):
             vulnerability_results[host][port] = cve_list
 
             if (len(cve_list) > 0):
-                print("\nPossible CVEs Detected:")
+                print("Possible CVEs Detected:")
             for cve in vulnerability_results[host][port]:
                 print("\t" + unicode(cve))
 
